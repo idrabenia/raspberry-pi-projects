@@ -1,0 +1,30 @@
+{
+  "name": "predix-node-red",
+  "version": "0.0.1",
+  "author": "Ilya Drabenia <ilya.drabenia@altoros.com>",
+  "scripts": {
+    "start": "node node_modules/node-red/red.js --settings settings.js",
+    "debug": "node-debug node_modules/node-red/red.js --settings settings.js",
+    "deploy": "script/deploy",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "body-parser": "1.15.0",
+    "cors": "2.7.1",
+    "is-utf8": "0.2.1",
+    "media-typer": "0.3.0",
+    "on-headers": "1.0.1",
+    "raw-body": "2.1.5",
+    "request": "2.69.0",
+    "request-promise": "2.0.1",
+    "bluebird": "2.3",
+    "websocket": "1.0.22",
+    "ws": "1.0.1",
+    "node-red": "^0.13.4",
+    "redis": "^2.5.3",
+    "when": "^3.7.7"
+  },
+  "devDependencies": {
+    "node-inspector": "^0.12.7"
+  }
+}

@@ -1,0 +1,57 @@
+<script type="text/javascript">
+    RED.nodes.registerType('px-uaa-secured-http-inbound', {
+      category: 'predix',
+      color: '#FFF02E',
+      defaults: {
+        method: { value: 'get', required: true },
+        name: { value: ''},
+        url: { value: '', required: true },
+        _credentials: { value: '', type: 'px-uaa-config' },
+        authorities: { value: ''}
+      },
+      icon: 'uaa.png',
+      inputs: 0,
+      outputs: 1,
+      label: function() {
+        return this.name || 'http';
+      },
+      paletteLabel: 'http'
+    });
+</script>
+
+<script type="text/x-red" data-template-name="px-uaa-secured-http-inbound">
+  <div class="form-row">
+    <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+  </div>
+
+  <div class="form-row">
+      <label for="node-input-method"><i class="fa fa-tasks"></i>Method</label>
+      <select type="text" id="node-input-method" style="width:72%;">
+      <option value="get">GET</option>
+      <option value="post">POST</option>
+      <option value="put">PUT</option>
+      <option value="patch">PATCH</option>
+      <option value="delete">DELETE</option>
+      </select>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-url">Path</label>
+    <input type="text" id="node-input-url" placeholder="Path" />
+  </div>
+
+  <div class="form-row node-input-reuseAuth-row">
+    <label for="node-input-_credentials">Credentials</label>
+    <input type="text" id="node-input-_credentials" placeholder="Credentials" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-authorities">Authorities</label>
+    <input type="text" id="node-input-authorities" placeholder="Authorities" />
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="px-uaa-secured-http-inbound">
+    <p>A node that make a request to Predix endpoint</p>
+</script>

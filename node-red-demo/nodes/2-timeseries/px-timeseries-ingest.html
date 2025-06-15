@@ -1,0 +1,46 @@
+<script type="text/javascript">
+  RED.nodes.registerType('px-timeseries-ingest', {
+    category: 'predix',
+    align: 'right',
+    color: '#00cc00',
+    defaults: {
+      name: { value: '' },
+      url: { value: '' },
+      predixZoneId: { value: '' },
+      _credentials: { value: '', type: 'px-uaa-config' }
+    },
+    inputs: 1,
+    outputs: 0,
+    icon: "timeseries.png",
+    label: function() {
+      return this.name || 'timeseries';
+    },
+    paletteLabel: 'timeseries'
+  });
+</script>
+
+<script type="text/x-red" data-template-name="px-timeseries-ingest">
+  <div class="form-row">
+    <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-url">Ingestion URL</label>
+    <input type="text" id="node-input-url" placeholder="Ingestion URL" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-predixZoneId">Predix Zone</label>
+    <input type="text" id="node-input-predixZoneId" placeholder="Predix Zone ID" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-_credentials">Credentials</label>
+    <input type="text" id="node-input-_credentials" placeholder="Credentials" />
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="px-timeseries-ingest">
+    <p>A simple node that push data to Predix timeseries storage</p>
+</script>

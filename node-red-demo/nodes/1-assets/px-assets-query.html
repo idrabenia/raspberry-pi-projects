@@ -1,0 +1,45 @@
+<script type="text/javascript">
+  RED.nodes.registerType('px-assets-query', {
+    category: 'predix',
+    color: '#008AE6',
+    defaults: {
+      name: { value: '' },
+      service: { value: '', type: 'px-assets-service-config' },
+      model: { value: '' },
+      _credentials: { value: '', type: 'px-uaa-config' }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "assets.png",
+    label: function() {
+      return this.name || "Assets Query";
+    },
+    paletteLabel: 'assets'
+  });
+</script>
+
+<script type="text/x-red" data-template-name="px-assets-query">
+  <div class="form-row">
+    <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-service">Service</label>
+    <input type="text" id="node-input-service" placeholder="Assets Service" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-_credentials">Credentials</label>
+    <input type="text" id="node-input-_credentials" placeholder="Credentials" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-model">Model</label>
+    <input type="text" id="node-input-model" placeholder="Model" />
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="px-assets-query">
+    <p>A simple node that query data from Predix Assets</p>
+</script>

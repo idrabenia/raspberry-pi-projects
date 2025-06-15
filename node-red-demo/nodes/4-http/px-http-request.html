@@ -1,0 +1,63 @@
+<script type="text/javascript">
+    RED.nodes.registerType('px-uaa-secured-http', {
+      category: 'predix',
+      color: '#FFF02E',
+      defaults: {
+        method: { value: '', required: true },
+        name: { value: ''},
+        endpoint: { value: '', required: true },
+        predixZoneId: { value: '' },
+        predixZoneHeaderName: { value: 'Predix-Zone-Id' },
+        _credentials: { value: '', type: 'px-uaa-config' }
+      },
+      icon: 'uaa.png',
+      inputs: 1,
+      outputs: 1,
+      label: function() {
+        return this.name || 'http request';
+      },
+      paletteLabel: 'http request'
+    });
+</script>
+
+<script type="text/x-red" data-template-name="px-uaa-secured-http">
+  <div class="form-row">
+    <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+  </div>
+
+  <div class="form-row">
+      <label for="node-input-method"><i class="fa fa-tasks"></i>Method</label>
+      <select type="text" id="node-input-method" style="width:72%;">
+      <option value="GET">GET</option>
+      <option value="POST">POST</option>
+      <option value="PUT">PUT</option>
+      <option value="PATCH">PATCH</option>
+      <option value="DELETE">DELETE</option>
+      </select>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-endpoint">Predix Endpoint</label>
+    <input type="text" id="node-input-endpoint" placeholder="Predix Endpoint" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-predixZoneHeaderName">Zone Header</label>
+    <input type="text" id="node-input-predixZoneHeaderName" placeholder="Zone Header Name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-predixZoneId">Predix Zone</label>
+    <input type="text" id="node-input-predixZoneId" placeholder="Zone Header Value" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-_credentials">Credentials</label>
+    <input type="text" id="node-input-_credentials" placeholder="Credentials" />
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="px-uaa-secured-http">
+    <p>A node that make a request to Predix endpoint</p>
+</script>

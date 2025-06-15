@@ -1,0 +1,49 @@
+<script type="text/javascript">
+  RED.nodes.registerType('px-assets-modify', {
+    category: 'predix',
+    color: '#008AE6',
+    defaults: {
+      name: { value: '' },
+      service: { value: '', type: 'px-assets-service-config' },
+      mode: { value: 'create' },
+      _credentials: { value: '', type: 'px-uaa-config' }
+    },
+    inputs: 1,
+    icon: "assets.png",
+    align: 'right',
+    label: function() {
+      return this.name || "Assets Modify";
+    },
+    paletteLabel: 'assets'
+  });
+</script>
+
+<script type="text/x-red" data-template-name="px-assets-modify">
+  <div class="form-row">
+    <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-service">Service</label>
+    <input type="text" id="node-input-service" placeholder="Assets Service" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-mode">Mode</label>
+    <select id="node-input-mode">
+      <option value="create" selected>Create</option>
+      <option value="update">Update</option>
+      <option value="delete">Delete</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-_credentials">Credentials</label>
+    <input type="text" id="node-input-_credentials" placeholder="Credentials" />
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="px-assets-modify">
+    <p>A simple node that modifies data in Predix Assets</p>
+</script>
