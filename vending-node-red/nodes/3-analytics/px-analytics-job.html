@@ -1,0 +1,57 @@
+<script type="text/javascript">
+  RED.nodes.registerType('px-analytics-job', {
+    category: 'predix',
+    color: '#ff8533',
+    defaults: {
+      name: { value: '' },
+      url: { value: '' },
+      taxonomy: { value: '' },
+      jobName: { value: '' },
+      predixZoneId: { value: '' },
+      _credentials: { value: '', type: 'px-uaa-config' }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "analytics-job.png",
+    label: function() {
+      return this.name || 'analytics job';
+    },
+    paletteLabel: 'analytics job'
+  });
+</script>
+
+<script type="text/x-red" data-template-name="px-analytics-job">
+  <div class="form-row">
+    <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-url">Analytics URI</label>
+    <input type="text" id="node-input-url" placeholder="Analytics Catalog URI" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-predixZoneId">Predix Zone ID</label>
+    <input type="text" id="node-input-predixZoneId" placeholder="Predix Zone ID" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-jobName">Job name</label>
+    <input type="text" id="node-input-jobName" placeholder="Job name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-taxonomy">Taxonomy Path</label>
+    <input type="text" id="node-input-taxonomy" placeholder="Taxonomy Path" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-_credentials">Credentials</label>
+    <input type="text" id="node-input-_credentials" placeholder="Credentials" />
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="px-analytics-job">
+    <p>A node that executes analytics based on taxonomy and analytics name</p>
+</script>

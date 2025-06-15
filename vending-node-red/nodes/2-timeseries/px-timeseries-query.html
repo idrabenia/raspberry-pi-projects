@@ -1,0 +1,88 @@
+<script type="text/javascript">
+  RED.nodes.registerType('px-timeseries-query', {
+    category: 'predix',
+    color: '#00cc00',
+    defaults: {
+      name: { value: '' },
+      _service: { value: '', type: 'px-timeseries-query-config' },
+      queryFunc: { value: '\nreturn msg.payload;' },
+      queryErrorFlag: {
+        value: 0,
+        required: true,
+        validate: function(v) { return ((!v) || (v === 0)); }
+      },
+      _credentials: { value: '', type: 'px-uaa-config' }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "timeseries.png",
+    label: function() {
+      return this.name || 'timeseries';
+    },
+    paletteLabel: 'timeseries',
+    oneditprepare: function() {
+      this.editor = RED.editor.createEditor({
+        id: 'node-input-queryFunc-editor',
+        mode: 'ace/mode/javascript',
+        value: $("#node-input-queryFunc").val()
+      });
+    },
+    oneditsave: function() {
+      var annot = this.editor.getSession().getAnnotations();
+      this.queryErrorFlag = 0;
+      $("#node-input-queryErrorFlag").val(0);
+      // Check editor for errors
+      for (var k = 0; k < annot.length; k++) {
+        if (annot[k].type === "error") {
+          $("#node-input-queryErrorFlag").val(annot.length);
+          this.queryErrorFlag = annot.length;
+        }
+      }
+      $("#node-input-queryFunc").val(this.editor.getValue());
+      delete this.editor;
+    },
+    oneditresize: function(size) {
+      var rows = $("#dialog-form>div:not(.node-text-editor-row)");
+      var height = $("#dialog-form").height();
+      for (var i = 0; i < rows.size(); i++) {
+        height -= $(rows[i]).outerHeight(true);
+      }
+      var editorRow = $("#dialog-form>div.node-text-editor-row");
+      height -= (parseInt(editorRow.css("marginTop")) +
+                 parseInt(editorRow.css("marginBottom")));
+      $(".node-text-editor").css("height",height+"px");
+      this.editor.resize();
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="px-timeseries-query">
+  <div class="form-row">
+    <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-_service">Service</label>
+    <input type="text" id="node-input-_service" placeholder="Service" />
+  </div>
+
+  <div class="form-row node-input-reuseAuth-row">
+    <label for="node-input-_credentials">Credentials</label>
+    <input type="text" id="node-input-_credentials" placeholder="Credentials" />
+  </div>
+
+  <div class="form-row" style="margin-bottom: 0px;">
+    <label for="node-input-queryFunc">Query function</label>
+    <input type="hidden" id="node-input-queryFunc" autofocus="autofocus">
+    <input type="hidden" id="node-input-queryErrorFlag">
+  </div>
+
+  <div class="form-row node-text-editor-row">
+    <div style="height: 250px;" class="node-text-editor" id="node-input-queryFunc-editor" ></div>
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="px-timeseries-query">
+    <p>A simple node that query data from Predix Timeseries</p>
+</script>

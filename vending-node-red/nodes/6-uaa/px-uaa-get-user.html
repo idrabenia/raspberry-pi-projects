@@ -1,0 +1,39 @@
+<script type="text/javascript">
+  RED.nodes.registerType('px-uaa-get-user', {
+    category: 'predix',
+    color: '#FFF02E',
+    defaults: {
+      name: { value: '' },
+      // authorized: { value: '' },
+      _credentials: { value: '', type: 'px-uaa-config' }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "uaa.png",
+    label: function() {
+      return this.name || "Get User";
+    },
+    paletteLabel: 'Get User'
+  });
+</script>
+
+<script type="text/x-red" data-template-name="px-uaa-get-user">
+  <div class="form-row">
+    <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-_credentials">Credentials</label>
+    <input type="text" id="node-input-_credentials" placeholder="Credentials" />
+  </div>
+
+  <!-- <div class="form-row">
+    <label for="node-input-authorized"><i class="icon-tag"></i>Authorized groups</label>
+    <input type="text" id="node-input-authorized" placeholder="Authorized groups separated by spaces" />
+  </div> -->
+</script>
+
+<script type="text/x-red" data-help-name="px-uaa-get-user">
+  <p>A simple node intended to get users information</p>
+</script>

@@ -1,0 +1,156 @@
+<script type="text/javascript">
+  RED.nodes.registerType('px-assets-query', {
+    category: 'predix',
+    color: '#008AE6',
+    defaults: {
+      name: { value: '' },
+      service: { value: '', type: 'px-assets-service-config' },
+      model: { value: '' },
+      query: { value: '' },
+      _credentials: { value: '', type: 'px-uaa-config' }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "assets.png",
+    label: function() {
+      return this.name || "Assets Query";
+    },
+    paletteLabel: 'assets'
+  });
+</script>
+
+<script type="text/x-red" data-template-name="px-assets-query">
+  <div class="form-row">
+    <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-service">Service</label>
+    <input type="text" id="node-input-service" placeholder="Assets Service" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-_credentials">Credentials</label>
+    <input type="text" id="node-input-_credentials" placeholder="Credentials" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-model">Model</label>
+    <input type="text" id="node-input-model" placeholder="Model" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-query">Query</label>
+    <input type="text" id="node-input-query" placeholder="{}" />
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="px-assets-query">
+    <p>A simple node that query data from Predix Asset Service API</p>
+
+    <p>
+      You can read <a href="https://www.predix.io/docs/#wa26x7FY" target="_blank">the complete documentation here</a>
+    </p>
+
+    <h2>Configuration</h2>
+    <p>You have to complete the Service, Credentials and Model fields:</p>
+    <ul>
+      <li><b>Credentials</b>: Add or create a configuration node with the fields needed to authenticate to a Predix UAA instance.<br>You will need to create and bind an UAA Instance to your application following <a href="https://www.predix.io/docs/?b=#XpKGAdQ7-ao7RnIco" target="_blank">this instructions</a> and then specify the UAA's URL and Client ID and Client Secret of the client who will use the Asset Service.<br>Remember you will also have to add the <i>predix-asset.zones.[ZONE_ID].user</i> authority to that client.</li>
+      <li><b>Service</b>: Add or create a configuration node with the fields needed to connect with the Asset Service Instance.<br>You will need to create and bind an Asset Service Instance to your application following <a href="https://www.predix.io/docs/?r=278037#o7VI2l7" target="_blank">this instructions</a> and then specify the service's URL and Predix Zone Id.</li>
+      <li><b>Model</b>: The target endpoint for your request, needed to specify which collection of objects you want to retrieve (e.g. <i>locomotives</i>). If you want to retrieve all the domain objects, you have to fill the field with <i>assets</i>.</li>
+    </ul>
+
+    <h2>Usage</h2>
+
+    <div>
+      <h2>Request Parameters</h2>
+      <p>
+        You have to complete the <b>Query</b> input with the desired query in JSON format, if the field is empty, the msg.payload will be used, which can be a JSON object or a String.
+      </p>
+
+      <p>The Asset service supports the following request parameters:</p>
+
+      <div>
+          <table cellpadding="4" cellspacing="0" summary="" id="reference_63400152-e3b8-4240-a1fd-5733e532ab3c__table_6890f6d2-f0f7-4835-966f-884c7452694f" frame="border" border="1" rules="all">
+              <thead align="left">
+                  <tr>
+                      <th valign="top" width="20%" id="d26e115">Request Parameters</th>
+                      <th valign="top" width="80%" id="d26e117">Description</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                      <td valign="top" width="20%" headers="d26e115 ">
+                          <samp>fields</samp>
+                      </td>
+                      <td valign="top" width="80%" headers="d26e117 ">Retrieves selected fields of a large object or a collection of large objects. For example, to retrieve a few attributes from an asset with many attributes, indicate the selected attributes in the <samp>fields</samp> key. See <a href="https://www.predix.io/docs/?r=358758#yZaue4bH" target="_blank">Partial Response Requests</a>.</td>
+                  </tr>
+                  <tr>
+                      <td valign="top" width="20%" headers="d26e115 ">
+                          <samp>filter</samp>
+                      </td>
+                      <td valign="top" width="80%" headers="d26e117 ">Use Graph Expression Language (GEL) in the <samp>filter</samp> key to filter the data that appears in results. See <a href="https://www.predix.io/docs/#FCyOAzZE" target="_blank">Graph Expression Language (GEL) Query Syntax</a>.</td>
+                  </tr>
+                  <tr>
+                      <td valign="top" width="20%" headers="d26e115 ">
+                          <samp>pageSize</samp>
+                      </td>
+                      <td valign="top" width="80%" headers="d26e117 ">Defines the number of entities to be returned per page (default is 100). Maximum <samp>pageSize</samp> is 1000. See <a href="https://www.predix.io/docs/?r=358758#lI0ZY7K6" target="_blank">Pagination Requests</a>.</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+
+      <p>The following JSON query uses <samp>filter</samp> and <samp>fields</samp> keys:</p>
+
+      <pre>
+{
+  "filter": "type=Diesel-electric+", "fields": "uri,type"
+}
+      </pre>
+
+      <p>The parameters are described in the following table:</p>
+      <div>
+          <table cellpadding="4" cellspacing="0" summary="" id="reference_63400152-e3b8-4240-a1fd-5733e532ab3c__table_54e7969a-8719-4535-aafa-5035b2ef91a7" frame="border" border="1" rules="all">
+              <thead align="left">
+                  <tr>
+                      <th valign="top" width="25%" id="d26e183">Request item</th>
+                      <th valign="top" width="75%" id="d26e185">Description</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                      <td valign="top" width="25%" headers="d26e183 ">
+                          <samp>filter=type=Diesel-electric</samp>
+                      </td>
+                      <td valign="top" width="75%" headers="d26e185 ">Filter clause containing a GEL query requesting all <samp>assets</samp> of the type <samp>Diesel-electric</samp>.</td>
+                  </tr>
+                  <tr>
+                      <td valign="top" width="25%" headers="d26e183 ">
+                          <samp>fields=uri,model</samp>
+                      </td>
+                      <td valign="top" width="75%" headers="d26e185 ">Clause requesting that only <samp>uri</samp> and <samp>model</samp> fields are returned.</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+      <p>See also <a href="https://www.predix.io/docs/?r=358757#qE5i0glh" target="_blank">Sample Asset Service API Requests</a>.</p>
+  <div>
+
+  <div>
+    <h2>Response</h2>
+    <p>
+      The response will be an array of the resources that matched the filters, in JSON format, for example:
+    </p>
+    <pre>
+[
+  {
+    "uri": "/locomotives/1",
+    "type": "Diesel-electric",
+    "manufacturer": "/manufacturers/GE"
+  }
+]
+    </pre>
+  </div>
+</script>

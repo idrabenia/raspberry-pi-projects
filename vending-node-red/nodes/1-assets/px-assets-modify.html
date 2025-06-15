@@ -1,0 +1,157 @@
+<script type="text/javascript">
+  RED.nodes.registerType('px-assets-modify', {
+    category: 'predix',
+    color: '#008AE6',
+    defaults: {
+      name: { value: '' },
+      service: { value: '', type: 'px-assets-service-config' },
+      mode: { value: 'create' },
+      queryFunc: { value: '\nreturn msg.payload;' },
+      queryErrorFlag: {
+        value: 0,
+        required: true,
+        validate: function(v) { return ((!v) || (v === 0)); }
+      },
+      _credentials: { value: '', type: 'px-uaa-config' }
+    },
+    inputs: 1,
+    icon: "assets.png",
+    align: 'right',
+    label: function() {
+      return this.name || "Assets Modify";
+    },
+    paletteLabel: 'assets',
+    oneditprepare: function() {
+      this.editor = RED.editor.createEditor({
+        id: 'node-input-queryFunc-editor',
+        mode: 'ace/mode/javascript',
+        value: $("#node-input-queryFunc").val()
+      });
+    },
+    oneditsave: function() {
+      var annot = this.editor.getSession().getAnnotations();
+      this.queryErrorFlag = 0;
+      $("#node-input-queryErrorFlag").val(0);
+      // Check editor for errors
+      for (var k = 0; k < annot.length; k++) {
+        if (annot[k].type === "error") {
+          $("#node-input-queryErrorFlag").val(annot.length);
+          this.queryErrorFlag = annot.length;
+        }
+      }
+      $("#node-input-queryFunc").val(this.editor.getValue());
+      delete this.editor;
+    },
+    oneditresize: function(size) {
+      var rows = $("#dialog-form>div:not(.node-text-editor-row)");
+      var height = $("#dialog-form").height();
+      for (var i = 0; i < rows.size(); i++) {
+        height -= $(rows[i]).outerHeight(true);
+      }
+      var editorRow = $("#dialog-form>div.node-text-editor-row");
+      height -= (parseInt(editorRow.css("marginTop")) +
+                 parseInt(editorRow.css("marginBottom")));
+      $(".node-text-editor").css("height",height+"px");
+      this.editor.resize();
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="px-assets-modify">
+  <div class="form-row">
+    <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-service">Service</label>
+    <input type="text" id="node-input-service" placeholder="Assets Service" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-mode">Mode</label>
+    <select id="node-input-mode">
+      <option value="create" selected>Create</option>
+      <option value="update">Update</option>
+      <option value="delete">Delete</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-_credentials">Credentials</label>
+    <input type="text" id="node-input-_credentials" placeholder="Credentials" />
+  </div>
+
+
+  <div class="form-row" style="margin-bottom: 0px;">
+    <label for="node-input-queryFunc">Query function</label>
+    <input type="hidden" id="node-input-queryFunc" autofocus="autofocus">
+    <input type="hidden" id="node-input-queryErrorFlag">
+  </div>
+
+  <div class="form-row node-text-editor-row">
+    <div style="height: 250px;" class="node-text-editor" id="node-input-queryFunc-editor" ></div>
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="px-assets-modify">
+  <p>A simple node that modifies data in Predix Asset Service API</p>
+
+  <p>
+    You can read <a href="https://www.predix.io/docs/#wa26x7FY" target="_blank">the complete documentation here</a>
+  </p>
+
+  <h2>Configuration</h2>
+  <p>You have to complete the Service, Credentials and Mode fields:</p>
+  <ul>
+    <li><b>Credentials</b>: Add or create a configuration node with the fields needed to authenticate to a Predix UAA instance.<br>You will need to create and bind an UAA Instance to your application following <a href="https://www.predix.io/docs/?b=#XpKGAdQ7-ao7RnIco" target="_blank">this instructions</a> and then specify the UAA's URL and Client ID and Client Secret of the client who will use the Asset Service.<br>Remember you will also have to add the <i>predix-asset.zones.[ZONE_ID].user</i> authority to that client.</li>
+    <li><b>Service</b>: Add or create a configuration node with the fields needed to connect with the Asset Service Instance.<br>You will need to create and bind an Asset Service Instance to your application following <a href="https://www.predix.io/docs/?r=278037#o7VI2l7" target="_blank">this instructions</a> and then specify the service's URL and Predix Zone Id.</li>
+    <li><b>Mode</b>: The type of request method you want to use.
+      <ul>
+        <li><b>Create</b> makes a <b>POST</b> request. It is used for creating (or optionally updating them completely if they exist) a set of resources. You can POST to a collection, but not to a specific resource. A POST request cannot exceed 50 MB.</li>
+        <li><b>Update</b> makes a <b>PUT</b> request. It is used for updating completely (or creating it if it doesn't exist) a single resource. You can use this mode for an individual resource, but not for a collection. It will update the whole state of the given resource (it won't only update the specified attributes)</li>
+        <li><b>Delete</b> makes a <b>DELETE</b> request. It is used for removing a resource. You can use this mode for an individual resource, but not for a collection.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>Usage</h2>
+
+  <div>
+    <h2>Request Parameters</h2>
+    <p>
+      You have to pass the desired resources inside the msg.payload in JSON format
+    </p>
+
+    <p>A good payload example could be this:
+    <pre>
+[{ "uri": "/locomotives/26", "type": "Diesel-electric+", "model": "ES44AC"}]
+    </pre>
+    </p>
+
+    <p>
+      If used with the <b>Create</b> mode (because it's an array), it will create the locomotive resource with id 26 and the specified attributes.
+    </p>
+
+    <p>
+      If you are using the <b>Update</b> mode, you can use the same JSON to update the resource, but remember to remove the square brackets([]), because you only can update a single resource at a time.
+    </p>
+
+    <p>
+      For using the <b>Delete</b> mode, you just need to specify the uri field, for example:
+      <pre>
+{ "uri": "/locomotives/26" }
+      </pre>
+      Remember you can only delete one resource at a time.
+    </p>
+
+    <p>
+      Also you can pass the resources in in any format with any fields you want, and use the <b>Query function</b> node field to prepare the data to be stored correctly.
+      <b>Query function</b> is a Javascript function that returns data for being posted to Predix Asset Service.
+      For example, you could pass the resources inside msg.payload.test and then fill the <b>Query function</b> field with this:
+      <pre>
+return msg.payload.test;
+      </pre>
+    </p>
+  <div>
+</script>

@@ -1,0 +1,31 @@
+<script type="text/javascript">
+    var options = {
+      category: 'config',
+      defaults: {
+        name: { value: '', required: true },
+        url: { value: '', required: true },
+        predixZone: { value: '', required: true }
+      },
+      label: function() {
+        return this.name || 'Unnamed Timeseries Config';
+      }
+    };
+    RED.nodes.registerType('px-timeseries-ingest-config', options);
+</script>
+
+<script type="text/x-red" data-template-name="px-timeseries-ingest-config">
+  <div class="form-row">
+    <label for="node-config-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-config-input-name" placeholder="Name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-url">Ingest Url</label>
+    <input type="text" id="node-config-input-url" placeholder="Ingest Url" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-clientId">Predix Zone</label>
+    <input type="text" id="node-config-input-predixZone" placeholder="Predix Zone" />
+  </div>
+</script>

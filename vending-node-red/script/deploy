@@ -1,0 +1,4 @@
+#!/bin/bash -e
+
+cf service redis-service || cf create-service redis-1 shared-vm redis-service
+cf push
