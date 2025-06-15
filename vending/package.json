@@ -1,0 +1,8 @@
+{
+  "author": "Ilya Drabenia",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "^4.13.4",
+    "node-grovepi": "^2.0.9"
+  }
+}
